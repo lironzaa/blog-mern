@@ -1,4 +1,4 @@
-import { ACTION_TYPES, ACTIONS_TYPES } from '../actions/postMessage';
+import { ACTIONS_TYPES } from '../actions/postMessage';
 
 const initialState = {
   posts: []
