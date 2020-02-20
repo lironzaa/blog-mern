@@ -11,6 +11,21 @@ export const postMessages = (state = initialState, action) => {
         ...state,
         posts: [...action.payload]
       }
+    case ACTIONS_TYPES.CREATE:
+      return {
+        ...state,
+        posts: [...state.posts, action.payload]
+      }
+    case ACTIONS_TYPES.UPDATE:
+      return {
+        ...state,
+        posts: state.posts.map(post => post._id == action.payload._id ? action.payload : post)
+      }
+    case ACTIONS_TYPES.DELETE:
+      return {
+        ...state,
+        posts: state.posts.filter(post => post._id != action.payload)
+      }
     default:
       return state;
   }
