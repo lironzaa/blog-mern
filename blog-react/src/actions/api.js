@@ -7,7 +7,7 @@ export default {
     return {
       fetchAll: () => axios.get(url),
       fetchById: id => axios.get(url + id),
-      create: newPost => axios.post(url + newPost),
+      create: newPost => axios.post(url, newPost),
       update: (id, updatedPost) => axios.post(url + id, updatedPost),
       delete: id => axios.post(url + id)
     }

@@ -1,17 +1,25 @@
-import React, { useEffect, Fragment } from 'react';
+import React, { useEffect, Fragment, useState } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions/postMessage';
 import PostMessageForm from './PostMessageForm';
-import { Grid, Paper, withStyles, List, Divider, Typography, ListItemText, ListItem } from '@material-ui/core';
+import { Grid, Paper, withStyles, List, Divider, Typography, ListItemText, ListItem, Button } from '@material-ui/core';
 
 const styles = theme => ({
   paper: {
     margin: theme.spacing(3),
     padding: theme.spacing(2)
+  },
+  smMargin: {
+    margin: theme.spacing(1)
+  },
+  actionDiv: {
+    textAlign: "center"
   }
 })
 
 const PostMessages = ({ classes, ...props }) => {
+  const [currentId, setCurrentId] = useState(0);
+
   useEffect(() => {
     props.fetchAll();
   }, [])
@@ -20,7 +28,7 @@ const PostMessages = ({ classes, ...props }) => {
     <Grid container>
       <Grid item xs={5}>
         <Paper className={classes.paper}>
-          <PostMessageForm />
+          <PostMessageForm {...{ currentId, setCurrentId }} />
         </Paper>
       </Grid>
       <Grid item xs={7}>
@@ -37,6 +45,13 @@ const PostMessages = ({ classes, ...props }) => {
                       <div>
                         {post.message}
                       </div>
+                      <div className={classes.actionDiv}>
+                        <Button onClick={() => {
+                          setCurrentId(post._id);
+                          console.log(post._id);
+                        }} className={classes.smMargin} variant="contained" color="primary" size="small">Edit</Button>
+                        <Button className={classes.smMargin} variant="contained" color="secondary" size="small">Delete</Button>
+                      </div>
                     </ListItemText>
                   </ListItem>
                   <Divider component="li" />
@@ -46,7 +61,7 @@ const PostMessages = ({ classes, ...props }) => {
           </List>
         </Paper>
       </Grid>
-    </Grid>);
+    </Grid >);
 }
 
 const mapStateToProps = state => ({

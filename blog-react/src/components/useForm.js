@@ -5,11 +5,13 @@ const useForm = (initialFieldValues) => {
   const [errors, setErrors] = useState({});
 
   const handleInputChange = e => {
+    console.log('called');
     const { name, value } = e.target;
     setValues({
       ...values,
-      [name]: value
+      [name]: value,
     })
+    console.log(values);
   }
 
   return {

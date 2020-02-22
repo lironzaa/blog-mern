@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { TextField, withStyles, Button } from '@material-ui/core';
-import useForm from './useForm'
+import useForm from './useForm';
+import { connect } from 'react-redux';
+import * as actions from '../actions/postMessage';
+import ButterToast, { Cinnamon } from 'butter-toast';
+import { AssignmentTurnedIn } from '@material-ui/icons';
 
 const initialFieldValues = {
   title: '',
@@ -24,6 +28,17 @@ const styles = theme => ({
 })
 
 const PostMessageForm = ({ classes, ...props }) => {
+
+  useEffect(() => {
+    if (props.currentId != 0) {
+      console.log(props);
+      console.log(props.posts.find(post => post._id == props.currentId));
+      setValues({
+        ...props.posts.find(post => post._id == props.currentId)
+      })
+    }
+  }, [props.currentId])
+
   const validate = () => {
     let temp = { ...errors };
     temp.title = values.title ? '' : 'This field is required';
@@ -43,7 +58,14 @@ const PostMessageForm = ({ classes, ...props }) => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    if (validate()) window.alert('good');
+    const onSuccess = () => ButterToast.raise({
+      content: <Cinnamon.Crisp title="Post Box" icon={<AssignmentTurnedIn />}
+        content="Submitted successfully" scheme={Cinnamon.Crisp.SCHEME_PURPLE}
+      />
+    })
+    if (validate()) {
+      props.createPost(values, onSuccess);
+    }
   }
 
   return (
@@ -59,4 +81,14 @@ const PostMessageForm = ({ classes, ...props }) => {
   );
 }
 
-export default withStyles(styles)(PostMessageForm);
+const mapStateToProps = state => ({
+  posts: state.postMessages.posts
+})
+
+const mapActionsToProps = {
+  createPost: actions.createPost,
+  updatePost: actions.updatePost
+}
+
+
+export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(PostMessageForm));
